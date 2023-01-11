@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const width = document.getElementById('numWidth').value;
         const height = document.getElementById('numHeight').value;
         const platform = document.getElementById('radioLogin').elements["radioLogin"].value;
-        const exdata = '{\n\t"playVersion": "' + platform + '",\n\t"winHeight": "' + height + '",\n\t"winWidth": "' + width +  '"\n}'
+        const exdata = `{\n\t"playVersion": "${platform}",\n\t"winHeight": "${height}",\n\t"winWidth": "${width}"\n}`
         ipcRenderer.send('config-save', exdata);
         ipcRenderer.send('close-setting');
     })

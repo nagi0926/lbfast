@@ -6,7 +6,6 @@ const { app, BrowserWindow, dialog, Menu, shell, ipcMain } = require('electron')
 const path = require('path');
 
 let isSetNoTimeout = false;
-let idSettingWindow = null;
 let key = null;
 
 
@@ -23,13 +22,6 @@ const createMainWindow = () => {
             preload: path.join(__dirname, 'preload.js')
         }
     });
-    //const view = new BrowserView();
-    //win.setBrowserView(view)
-    /*
-    view.setAutoResize({
-        width: true,
-        height: true
-    });*/
     win.webContents.on('new-window', (e, url) => {
         let paymentWindow = new BrowserWindow({
             width:1024,
@@ -234,7 +226,7 @@ const templateMenu = [
                             type: 'info',
                             buttons: ['OK'],
                             message: 'Shukuchi',
-                            detail: 'Useful Browser for Assaultlily Last Bullet(Browser)\nDev:あんさいんどろんぐ(ulong32)\n\nVersion:' + app.getVersion()
+                            detail: 'ブラウザ版ラスバレ用のちょっと使いやすいプレイ環境\nDev:あんさいんどろんぐ(ulong32)\n\nVersion:' + app.getVersion()
                         }
                     );
                 }
