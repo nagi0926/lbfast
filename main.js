@@ -47,8 +47,7 @@ const createSettingWindow = () => {
         height: 600,
         useContentSize: true,
         webPreferences: {
-            preload: path.join(__dirname, 'setting.js'),
-            nodeIntegration: true
+            preload: path.join(__dirname, 'setting.js')
         }
     });
     winSetting.loadFile('setting.html');
