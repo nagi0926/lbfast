@@ -1,2 +1,2 @@
-# lbfast
-Fast and useful browser for Assaultlily Last Bullet(Browser)
+# Shukuchi
+ブラウザ版ラスバレ用のちょっと使いやすいプレイ環境

@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Shukuchiの設定</title>
+        <style>
+            p{
+                font-size: 18px;
+                text-indent: 1rem;
+            }
+            h2{
+                text-indent: 1rem;
+            }
+            h3{
+                text-indent: 2rem;
+            }
+            button{
+                font-size: x-large;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Shukuchiの設定</h1>
+        <p>Shukuchiの設定を行います。以下の項目を設定してください。</p>
+        <h2>ウィンドウサイズ</h2>
+        <h3><input type="checkbox" name="chkAuto" id="chkAuto"> 縦幅に合わせて横幅を設定する</h3>
+        <h3>横幅: <input type="number" name="numWidth" id="numWidth"></h3>
+        <h3>縦幅: <input type="number" name="numHeight" id="numHeight"></h3>
+        <h2>ログイン方法</h2>
+        <form id="radioLogin">
+            <p style="text-indent: 2rem;"><input type="radio" name="radioLogin" id="radioLogin1" value="0">ゲスト(非推奨)</p>
+            <p style="text-indent: 2rem;"><input type="radio" name="radioLogin" id="radioLogin2" value="2" checked>Twitter</p>
+            <p style="text-indent: 2rem;"><input type="radio" name="radioLogin" id="radioLogin3" value="3">Google</p>
+        </form>
+
+
+        <button id="btnExport">保存してShukuchiを実行</button>
+
+    </body>
+</html>
