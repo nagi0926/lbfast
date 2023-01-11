@@ -7,6 +7,7 @@ const path = require('path');
 
 let isSetNoTimeout = false;
 let key = null;
+let intervalID = null;
 
 
 
@@ -24,22 +25,14 @@ const createMainWindow = () => {
         }
     });
     win.webContents.on('new-window', (e, url) => {
-        let paymentWindow = new BrowserWindow({
-            width:1024,
-            height:576,
-            useContentSize:true,
-            icon: path.join(__dirname, 'icon.png'),
-            minWidth:1024,
-            minHeight:576,
-        });
-        paymentWindow.loadURL(url);
+        shell.openExternal(url);
     });
     win.loadURL('https://allb-browser.pokelabo.jp/web/play?type=' + configData['playVersion']);
-    let intervalID = setTimeout(() => {
+    intervalID = setInterval(() => {
         if(win.title != 'Shukuchi'){
             win.title = 'Shukuchi'
         }
-    }, 1500);
+    }, 1000);
     
 };
 
@@ -186,6 +179,7 @@ const templateMenu = [
                         });
                         
                         if(key == 0){
+                            clearInterval(intervalID);
                             focusedWindow.close();
                             createSettingWindow();
                         }
@@ -198,26 +192,24 @@ const templateMenu = [
     {
         label: 'ヘルプ(&H)',
         submenu: [
-            /*{
+            {
                 label: '更新の確認(&C)',
                 click() {
-                    dialog.showMessageBox(
+                    key = dialog.showMessageBoxSync(
                         {
                             type:'question',
                             buttons:['Yes', 'No'],
                             title: '確認',
                             message: 'ブラウザを開き、更新を確認します',
                             detail: 'ブラウザでGithubのリリースページを開きます。\n必要に応じて最新版をダウンロードしてください。\n現在のバージョン：' + app.getVersion()
-                        },
-                        (key) => {
-                            if (key !== null) {
-                                shell.openExternal('https://github.com/ulong32/Shukuchi/');
-                            }
-                            console.log(key)
+                        });
+                        if (key == 0) {
+                            shell.openExternal("https://github.com/ulong32/Shukuchi");
                         }
-                    );
+                        
+                    
                 }
-            },*/
+            },
             {
                 label: 'Shukuchiについて(&A)',
                 click() {
