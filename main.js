@@ -17,6 +17,7 @@ const createMainWindow = () => {
         width: parseInt(configData['winWidth']),
         height: parseInt(configData['winHeight']),
         title: 'Shukuchi',
+        icon: path.join(__dirname, 'icon.png'),
         useContentSize: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
@@ -27,6 +28,7 @@ const createMainWindow = () => {
             width:1024,
             height:576,
             useContentSize:true,
+            icon: path.join(__dirname, 'icon.png'),
             minWidth:1024,
             minHeight:576,
         });
@@ -46,6 +48,7 @@ const createSettingWindow = () => {
         width: 800,
         height: 600,
         useContentSize: true,
+        icon: path.join(__dirname, 'icon.png'),
         webPreferences: {
             preload: path.join(__dirname, 'setting.js')
         }

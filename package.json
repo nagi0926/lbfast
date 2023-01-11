@@ -18,6 +18,29 @@
   },
   "homepage": "https://github.com/ulong32/Shukuchi#readme",
   "devDependencies": {
-    "electron": "^22.0.0"
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0"
+  },
+  "build": {
+    "appId": "jp.ulong32.shukuchi",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "preload.js",
+      "setting.html",
+      "setting.js",
+      "icon.png"
+    ],
+    "win": {
+      "icon": "icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

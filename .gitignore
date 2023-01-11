@@ -3,3 +3,6 @@ logs
 config*.json
 index.html
 node_modules/
+out/
+dist/
+icon.ico
