@@ -32,7 +32,9 @@
       "preload.js",
       "setting.html",
       "setting.js",
-      "icon.png"
+      "icon.png",
+      "LICENSE",
+      "readme.txt"
     ],
     "win": {
       "icon": "icon.ico",
