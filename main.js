@@ -6,8 +6,9 @@ const { app, BrowserWindow, dialog, Menu, shell, ipcMain } = require('electron')
 const path = require('path');
 
 let isSetNoTimeout = false;
+let isLockAspectRatio = false;
 let key = null;
-let intervalID = null;
+let idMainWindow = null;
 
 
 
@@ -24,15 +25,53 @@ const createMainWindow = () => {
             preload: path.join(__dirname, 'preload.js')
         }
     });
+    idMainWindow = win.id;
     win.webContents.on('new-window', (e, url) => {
         shell.openExternal(url);
     });
-    win.loadURL('https://allb-browser.pokelabo.jp/web/play?type=' + configData['playVersion']);
-    intervalID = setInterval(() => {
-        if(win.title != 'Shukuchi'){
-            win.title = 'Shukuchi'
+    ipcMain.on('change-fullscreen', () => {
+        if (win.isFullScreen()){
+            win.setFullScreen(false);
+            win.setMenuBarVisibility(true);
+            win.setAutoHideMenuBar(false);
+        } else {
+            win.setFullScreen(true);
+            win.setMenuBarVisibility(false);
+            win.setAutoHideMenuBar(false);
         }
-    }, 1000);
+    })
+    let windowSize, contentSize, UISize, edge, currentSize;
+    win.on('will-resize', (e,size,detail) => {
+        windowSize = win.getSize();
+        contentSize = win.getContentSize();
+        UISize = [windowSize[0] - contentSize[0],windowSize[1] - contentSize[1]];
+        currentSize = size;
+        edge = detail.edge;
+    })
+
+    win.on('resize', () => {
+        if(!isLockAspectRatio) return;
+        switch(edge) {
+            case 'bottom':
+                win.setSize(parseInt((currentSize.height - UISize[1]) * 16 / 9) + UISize[0], currentSize.height);
+                break;
+            case 'left':
+            case 'right':
+                win.setSize(currentSize.width, parseInt((currentSize.width - UISize[0]) * 9 / 16) + UISize[1]);
+                break;
+            default :
+                if(Math.abs(currentSize.height - windowSize[1]) - Math.abs(currentSize.width - windowSize[0]) > 0) {
+                    win.setSize(currentSize.width, parseInt((currentSize.width - UISize[0]) * 9 / 16) + UISize[1]);
+                } else {
+                    win.setSize(parseInt((currentSize.height - UISize[1]) * 16 / 9) + UISize[0], currentSize.height);
+                }
+                break;
+        }
+    })
+
+    win.loadURL('https://allb-browser.pokelabo.jp/web/play?type=' + configData['playVersion']);
+
+    win.setTitle("Shukuchi");
     
 };
 
@@ -81,6 +120,9 @@ ipcMain.on('close-setting', () => {
     })
     createMainWindow();
 });
+ipcMain.on("DOM loaded", () => {
+    BrowserWindow.fromId(idMainWindow).setTitle('Shukuchi');
+});
 
 const templateMenu = [
     {
@@ -107,7 +149,6 @@ const templateMenu = [
             {
                 label: '全画面表示(&S)',
                 type: 'checkbox',
-                accelerator: 'F11',
                 click(item, focusedWindow) {
                     if (focusedWindow) {
                         if (focusedWindow.isFullScreen()){
@@ -137,16 +178,11 @@ const templateMenu = [
                 }
             },
             {
-                type: 'separator'
-            },
-            {
-                label: 'アプリのリセット',
-                role: 'forceReload'
-            },
-            {
-                label: '開発者ツール',
+                label: 'アスペクト比固定',
                 type: 'checkbox',
-                role: 'toggleDevTools'
+                click() {
+                    isLockAspectRatio = !isLockAspectRatio;
+                }
             }
         ]
     },
@@ -167,24 +203,29 @@ const templateMenu = [
                 }
             },
             {
+                label: 'アプリのリセット',
+                role: 'forceReload'
+            },
+            {
+                label: '開発者ツール',
+                type: 'checkbox',
+                role: 'toggleDevTools'
+            },
+            {
+                type: 'separator'
+            },
+            {
                 label: '設定',
                 click(item, focusedWindow) {
                     key = dialog.showMessageBoxSync(
-                        {
-                            type: 'question',
-                            buttons: ['Yes', 'No'],
-                            title: '確認',
-                            message: '設定画面を開きます',
-                            detail: '設定の反映のため、アプリケーションを一旦終了します。\nよろしいですか？'
-                        });
-                        
-                        if(key == 0){
-                            clearInterval(intervalID);
-                            focusedWindow.close();
-                            createSettingWindow();
-                        }
-                        
-                    
+                    {
+                        type: 'question',
+                        buttons: ['Yes', 'No'],
+                        title: '確認',
+                        message: '設定画面を開きます',
+                        detail: '設定の反映のため、設定終了後にアプリケーションを再起動します。\nよろしいですか？'
+                    });
+                    if(key == 0) createSettingWindow();
                 }
             }
         ]

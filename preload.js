@@ -12,6 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
             gestureModal.style.display = 'none';
         }
     }, 100);
+    ipcRenderer.send('DOM loaded');
 });
 
 function clickCanvas() {
@@ -27,6 +28,9 @@ ipcRenderer.on('no-timeout-false', () => {
     console.log("click interval clear");
 })
 
+addEventListener('keydown',(e)=> {
+    if(e.key == "F11") ipcRenderer.send('change-fullscreen');
+})
 
 
 
