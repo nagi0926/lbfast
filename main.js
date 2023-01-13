@@ -10,7 +10,29 @@ let isLockAspectRatio = false;
 let key = null;
 let idMainWindow = null;
 
-
+const setAspectRatio = (win, windowSize, UISize, edge, currentSize, posWindow) => {
+    
+    switch(edge) {
+        case 'bottom':
+            win.setSize(Math.round((currentSize.height - UISize[1]) * 16 / 9) + UISize[0], currentSize.height);
+            break;
+        case 'left':
+            break;
+        case 'right':
+            win.setSize(currentSize.width, Math.round((currentSize.width - UISize[0]) * 9 / 16) + UISize[1]);
+            break;
+        case 'top-left':
+        case 'bottom-left':
+            break;
+        default:
+            if(Math.abs(currentSize.height - windowSize[1]) - Math.abs(currentSize.width - windowSize[0]) > 0) {
+                win.setSize(currentSize.width, Math.round((currentSize.width - UISize[0]) * 9 / 16) + UISize[1]);
+            } else {
+                win.setSize(Math.round((currentSize.height - UISize[1]) * 16 / 9) + UISize[0], currentSize.height);
+            }
+            break;
+    }
+}
 
 const createMainWindow = () => {
 
@@ -39,36 +61,18 @@ const createMainWindow = () => {
             win.setMenuBarVisibility(false);
             win.setAutoHideMenuBar(false);
         }
-    })
-    let windowSize, contentSize, UISize, edge, currentSize;
+    });
     win.on('will-resize', (e,size,detail) => {
-        windowSize = win.getSize();
-        contentSize = win.getContentSize();
-        UISize = [windowSize[0] - contentSize[0],windowSize[1] - contentSize[1]];
-        currentSize = size;
-        edge = detail.edge;
+        if (!isLockAspectRatio) return;
+        const windowSize = win.getSize();
+        const contentSize = win.getContentSize();
+        const UISize = [windowSize[0] - contentSize[0],windowSize[1] - contentSize[1]];
+        const currentSize = size;
+        const edge = detail.edge;
+        const posWindow = win.getPosition();
+        e.preventDefault();
+        setAspectRatio(win, windowSize, UISize, edge, currentSize, posWindow);
     })
-
-    win.on('resize', () => {
-        if(!isLockAspectRatio) return;
-        switch(edge) {
-            case 'bottom':
-                win.setSize(parseInt((currentSize.height - UISize[1]) * 16 / 9) + UISize[0], currentSize.height);
-                break;
-            case 'left':
-            case 'right':
-                win.setSize(currentSize.width, parseInt((currentSize.width - UISize[0]) * 9 / 16) + UISize[1]);
-                break;
-            default :
-                if(Math.abs(currentSize.height - windowSize[1]) - Math.abs(currentSize.width - windowSize[0]) > 0) {
-                    win.setSize(currentSize.width, parseInt((currentSize.width - UISize[0]) * 9 / 16) + UISize[1]);
-                } else {
-                    win.setSize(parseInt((currentSize.height - UISize[1]) * 16 / 9) + UISize[0], currentSize.height);
-                }
-                break;
-        }
-    })
-
     win.loadURL('https://allb-browser.pokelabo.jp/web/play?type=' + configData['playVersion']);
 
     win.setTitle("Shukuchi");
