@@ -151,23 +151,6 @@ const templateMenu = [
                 type: 'separator'
             },
             {
-                label: '全画面表示(&S)',
-                type: 'checkbox',
-                click(item, focusedWindow) {
-                    if (focusedWindow) {
-                        if (focusedWindow.isFullScreen()){
-                            focusedWindow.setFullScreen(false);
-                            focusedWindow.setMenuBarVisibility(true);
-                            focusedWindow.setAutoHideMenuBar(false);
-                        } else {
-                            focusedWindow.setFullScreen(true);
-                            focusedWindow.setMenuBarVisibility(false);
-                            focusedWindow.setAutoHideMenuBar(false);
-                        }
-                    }
-                }
-            },
-            {
                 label: '最前面表示(&T)',
                 type: 'checkbox',
                 accelerator: 'CmdOrCtrl+T',

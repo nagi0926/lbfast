@@ -27,11 +27,3 @@ ipcRenderer.on('no-timeout-false', () => {
     clearInterval(intervalID);
     console.log("click interval clear");
 })
-
-addEventListener('keydown',(e)=> {
-    if(e.key == "F11") ipcRenderer.send('change-fullscreen');
-})
-
-
-
-
