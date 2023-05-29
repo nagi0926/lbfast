@@ -195,7 +195,6 @@ const templateMenu = [
             },
             {
                 label: '開発者ツール',
-                type: 'checkbox',
                 role: 'toggleDevTools'
             },
             {
