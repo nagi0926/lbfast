@@ -232,7 +232,7 @@ const templateMenu = [
                             detail: 'ブラウザでGithubのリリースページを開きます。\n必要に応じて最新版をダウンロードしてください。\n現在のバージョン：' + app.getVersion()
                         });
                         if (key == 0) {
-                            shell.openExternal("https://github.com/ulong32/Shukuchi");
+                            shell.openExternal("https://github.com/ulong32/Shukuchi/releases");
                         }
                         
                     
